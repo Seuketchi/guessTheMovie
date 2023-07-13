@@ -12,6 +12,7 @@ public class Main {
         //FIELDS:
         int score = 0;
         String guessedLetters = "";
+        StringBuilder wrongLetters = new StringBuilder();
         String selectedMovie = getRandomMovie(movieTitle);
         System.out.println(selectedMovie);
 
@@ -20,15 +21,19 @@ public class Main {
             String maskedTitle = checkGuess(selectedMovie, guessedLetters);
             System.out.println("You are guessing: " + maskedTitle);
 
+            if (!wrongLetters.toString().equals(" ")) {
+                System.out.println("You have guessed (" + score + ") wrong letters: " + wrongLetters);
+            }
             String guess = getGuess();
 
             for (char letters : guess.toCharArray()) {
                 if(Character.isLetter(letters)) {
                     if (selectedMovie.contains(String.valueOf(letters))) {
                         guessedLetters += letters;
+
                     } else {
                         score++;
-                        System.out.println("You have guessed (" + score + ") letters:");
+                        wrongLetters.append(letters).append(" ");
                     }
                 }
             }
@@ -52,14 +57,19 @@ public class Main {
         return movies.get(randomIndex);
     }
 
+
     public static String checkGuess(String movieTitle, String guessedLetters) {
         StringBuilder maskedTitle = new StringBuilder();
         for (char letters: movieTitle.toCharArray()) {
-            if(guessedLetters.contains(String.valueOf(letters))){
+            if(letters == ' ') {
+                maskedTitle.append(' ');
+            }
+            else if(guessedLetters.contains(String.valueOf(letters))){
                 maskedTitle.append(letters);
             }else {
                 maskedTitle.append('_');
             }
+
         }
         return maskedTitle.toString();
     }
@@ -87,4 +97,6 @@ public class Main {
             System.out.println("Out of guess, the word is '" + selectedMovie + "'.");
         }
     }
+
+
 }
